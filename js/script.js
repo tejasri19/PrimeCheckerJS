@@ -1,12 +1,8 @@
 // Algorithm hints taken from http://www.geeksforgeeks.org/primality-test-set-3-miller-rabin/
 
 function isPrime(num, k) {
-    if(num <= 0)
-        alert('Prime and composite are used only for positive integers.')
-    if(num == 1)
-        alert(num + ' is neither prime nor composite.');
     if(num == 2)
-        alert(num + ' is a prime number.');
+        return true;
     if(num % 2 == 0)
         return false;
 
@@ -17,7 +13,7 @@ function isPrime(num, k) {
     }
 
     for(var i = 0; i < k; i++) {
-        if(millerTest(num, d) == false) {
+        if(millerTest(num, d, r) == false) {
             return false;
         }
     }
@@ -33,4 +29,35 @@ function power(a, d, p) {
         return (a * (power(a, d - 1, p) % p)) % p;
     var n = power(a, d / 2, p);
     return n * n;
+}
+
+function millerTest(num, d, r) {
+    var a = Math.floor(Math.random() * (num - 2) + 2);
+    var x = power(a, d, num);
+    if(x == 1 || x == num - 1)
+        return true;
+    while(r-1 > 0) {
+        x = ((x % num) * (x % num)) % num;
+        if(x == 1)
+            return false;
+        if(x == num - 1)
+            return true;
+        r--;
+    }
+    return false;
+}
+
+function checkPrime() {
+    var primeToCheck = parseInt(document.getElementById("user_input").value);
+    var k = 4;
+    if(primeToCheck == 1) {
+        alert('1 is neither a prime nor composite');
+    } else if(primeToCheck <= 0) {
+        alert('The concept of prime and composite can be applied only to positive integers.')
+    } else {
+        if(isPrime(primeToCheck, k))
+            alert(primeToCheck + ' is a prime number.');
+        else
+            alert(primeToCheck + ' is a composite number.');
+    }
 }
