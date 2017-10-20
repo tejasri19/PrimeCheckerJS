@@ -27,12 +27,12 @@ function power(a, d, p) {
         return 1;
     if(d % 2 == 1)
         return (a * (power(a, d - 1, p) % p)) % p;
-    var n = power(a, d / 2, p);
-    return n * n;
+    var n = power(a, d / 2, p) % p;
+    return (n * n) % p;
 }
 
 function millerTest(num, d, r) {
-    var a = Math.floor(Math.random() * (num - 2) + 2);
+    var a = Math.floor(Math.random() * (num - 4) + 2);
     var x = power(a, d, num);
     if(x == 1 || x == num - 1)
         return true;
