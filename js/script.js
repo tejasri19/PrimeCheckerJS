@@ -1,14 +1,14 @@
 // Algorithm hints taken from http://www.geeksforgeeks.org/primality-test-set-3-miller-rabin/
 
 function isPrime(num, k) {
-    if(num == 2)
+    if(bigInt(num).eq(2))
         return true;
-    if(num % 2 == 0)
+    if(bigInt(num).mod(2).eq(0))
         return false;
 
-    var d = num - 1, r = 0;
-    while(d % 2 == 0) {
-        d /= 2;
+    var d = bigInt(num - 1), r = 0;
+    while(d.mod(2).eq(0)) {
+        d = d.divide(2);
         r++;
     }
 
@@ -22,25 +22,26 @@ function isPrime(num, k) {
 }
 
 function power(a, d, p) {
-    a = a % p;
-    if(d == 0)
+    a = bigInt(a).mod(p);
+    if(bigInt(d).eq(0))
         return 1;
-    if(d % 2 == 1)
-        return (a * (power(a, d - 1, p) % p)) % p;
-    var n = power(a, d / 2, p) % p;
-    return (n * n) % p;
+    if(bigInt(bigInt(d).mod(2)).eq(1))
+        return bigInt(a.multiply(bigInt(power(a, d-1, p)).mod(p))).mod(p); //return (a * (power(a, d - 1, p) % p)) % p;
+    var n = bigInt(power(a, bigInt(d/2), bigInt(p))).mod(p);
+    return bigInt(n.multiply(n)).mod(p);
 }
 
 function millerTest(num, d, r) {
-    var a = Math.floor(Math.random() * (num - 4) + 2);
-    var x = power(a, d, num);
-    if(x == 1 || x == num - 1)
+    var a = bigInt(Math.floor(Math.random() * (num - 4) + 2));
+    var x = bigInt(power(a, d, num));
+    if(x.eq(1) || x.eq(num - 1))
         return true;
-    while(r-1 > 0) {
-        x = ((x % num) * (x % num)) % num;
-        if(x == 1)
+
+    while(r-1 >= 0) {
+        x = x.mod(num).multiply(x.mod(num)).mod(num);
+        if(x.eq(1))
             return false;
-        if(x == num - 1)
+        if(x.eq(num-1))
             return true;
         r--;
     }
