@@ -5,6 +5,8 @@ function isPrime(num, k) {
         return true;
     if(bigInt(num.toString()).mod(2).eq(0))
         return false;
+    if(bigInt(num.toString()).eq(3))
+        return true;
 
     var d = bigInt(num.toString()).minus(1), r = 0;
     while(d.mod(2).eq(0)) {
